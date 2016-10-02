@@ -48,7 +48,7 @@ class Article_logic extends Yox_Logic {
 //             return $result;
 //         }
         //访问量+1
-        $update_data     = array('view'=>$get_article_info_result['data']['view']+1);
+        $update_data = array('view'=>$get_article_info_result['data']['view']+1);
         $this->update_article($condition,$update_data);
         
         $result['status']=1;
@@ -56,16 +56,47 @@ class Article_logic extends Yox_Logic {
 //         $this->write_log(__METHOD__,$result);
         return $result;
     }
+    /**
+     * 添加文章
+     * @param array $article_data
+     */
     public function add_article_info($article_data)
     {
+        $result = array('status'=>0);
+        if(empty($article_data)&&!is_array($article_data))
+        {
+            $result['message']='没有数据';
+            return $result;
+        }
+        if(!empty($article_data['user_id'])&&!is_numeric($article_data['user_id']))
+        {
+            $result['message']='user_id 错误';
+            return $result;
+        }
+        //浏览量
+        if(empty($article_data['view']))
+        {
+            $data['view']=rand(0, 15);
+        }
         
+        $add_article_info_result = $this->article_model->add_article_info($article_data);
+        
+        if($add_article_info_result['status']<1)
+        {
+            $result['message']=$add_article_info_result['message'];
+            return $result;
+        }
+        
+        $result['status']=1;
+        $result['message']='添加成功';
+        return $result;
     }
     /**
      * 获取用户列表
      * @param array $condition
      * @param number $page_size
      */
-    public function get_article_list($condition,$fields,$page_size=20)
+    public function get_article_list($condition,$fields='*',$page_size=20)
     {
         $result = array('status'=>0);
         if(!empty($condition['user_id'])&&!is_numeric($condition['user_id']))
@@ -84,6 +115,7 @@ class Article_logic extends Yox_Logic {
             $result['message']=$get_article_list_result['message'];
             return $result;
         }
+        
         $result['status']=1;
         $result['data']=$get_article_list_result['data'];
         return $result;

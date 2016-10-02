@@ -57,12 +57,13 @@ class Article_model extends CI_Model {
 	    $result['data']['article_id']=$is_insert;
 	    return $result;
 	}
-	public function get_article_list($condition,$fields,$page_size=20)
+	public function get_article_list($condition,$fields='*',$page_size=20)
 	{
         $result = array('status'=>0);
 	    $list = $this->db->where($condition)->select($fields)->order_by('id desc')->get($this->table)->result_array(); 
 	    $result['status']=1;
 	    $result['data']['list']=$list;
+	    return $result;
 	}
 	public function update_article($condition,$article_data)
 	{
