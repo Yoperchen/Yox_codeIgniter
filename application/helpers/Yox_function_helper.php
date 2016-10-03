@@ -68,8 +68,25 @@ if (!function_exists('Yox_get_qrcode'))
     function Yox_get_qrcode($data)
     {
         require_once(COMMON_PATH."Library/Qrcode/phpqrcode/phpqrcode.php");
-        //     require_once TC_ROOT.'include/phpqrcode/phpqrcode.php';
         $data = urldecode($data);
         QRcode::png($data);die();
+    }
+}
+if (!function_exists('Yox_is_ajax'))
+{
+    /**
+     * 是否AJAX请求
+     * @access protected
+     * @return bool
+     */
+    function Yox_is_ajax() {
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) ) {
+            if('xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH']))
+                return true;
+        }
+        if(!empty($_POST[C('VAR_AJAX_SUBMIT')]) || !empty($_GET[C('VAR_AJAX_SUBMIT')]))
+            // 判断Ajax方式提交
+            return true;
+        return false;
     }
 }
