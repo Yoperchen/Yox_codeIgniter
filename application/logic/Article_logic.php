@@ -63,7 +63,7 @@ class Article_logic extends Yox_Logic {
     public function add_article_info($article_data)
     {
         $result = array('status'=>0);
-        if(empty($article_data)&&!is_array($article_data))
+        if(empty($article_data)||!is_array($article_data))
         {
             $result['message']='没有数据';
             return $result;
@@ -129,8 +129,28 @@ class Article_logic extends Yox_Logic {
     public function update_article($condition,$article_data)
     {
         $result = array('status'=>0);
+        if(empty($condition)||!is_array($condition))
+        {
+            $result['message']='条件错误';
+            return $result;
+        }
+        if(empty($article_data)||!is_array($article_data))
+        {
+            $result['message']='修改信息错误';
+            return $result;
+        }
         
-        $this->article_model->update_article($condition,$article_data);
+        $update_result = $this->article_model->update_article($condition,$article_data);
+        
+        if($update_result['status']<1)
+        {
+            $result['message']=$update_result['message'];
+            return $result;
+        }
+        
+        $result['status']=1;
+        $result['data']=$update_result['data'];
+        return $result;
     }
     /**
      * 写日志

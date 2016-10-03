@@ -32,6 +32,11 @@ class Article_model extends Yox_Model {
 	    $result['data']=$info;
 	    return $result;
 	}
+	/**
+	 * 添加信息
+	 * @param array $article_data
+	 * @return array
+	 */
 	public function add_article_info($article_data) 
 	{
 	    $result = array('status'=>0);
@@ -58,6 +63,13 @@ class Article_model extends Yox_Model {
 	    $result['data']['article_id']=$is_insert;
 	    return $result;
 	}
+	/**
+	 * 获取列表
+	 * @param array $condition
+	 * @param string $fields
+	 * @param number $page_size
+	 * @return array
+	 */
 	public function get_article_list($condition,$fields='*',$page_size=20)
 	{
         $result = array('status'=>0);
@@ -78,6 +90,12 @@ class Article_model extends Yox_Model {
 	    $result['data']['list']=$list;
 	    return $result;
 	}
+	/**
+	 * 修改
+	 * @param array $condition
+	 * @param array $article_data
+	 * @return array
+	 */
 	public function update_article($condition,$article_data)
 	{
 	    $result = array('status'=>0);
@@ -90,6 +108,7 @@ class Article_model extends Yox_Model {
 	    if(!$is_update)
 	    {
 	        $result['message']='修改失败';
+	        return $result;
 	    }
 	    $result['status']=1;
 	    $result['message']='修改成功';
@@ -100,5 +119,9 @@ class Article_model extends Yox_Model {
 	    $cache_key=__METHOD__.'_article_id_'.$condition['id'];
 // 	    S($cache_key,null);
 	    return $result;
+	}
+	public function delete_article($condition) 
+	{
+	    ;
 	}
 }
