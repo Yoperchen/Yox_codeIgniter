@@ -38,12 +38,14 @@ class Article extends CI_Controller {
 	{
 	    $condition['type']=$this->input->get('type');//1:公告;2:普通文章;3:论坛贴;4日志;5说说;6:新闻
 	    $condition['store_id']=$this->input->get('store_id');
-	    $page_size=$this->input->get('page_size');;
+	    $page_size=$this->input->get('page_size')?$this->input->get('page_size'):20;
 // 	    print_r($condition);
 // 	    die();
-	    $get_article_list_result = $this->article_logic->get_article_list($condition,'*',$page_size=20);
-	    
-	    print_r($get_article_list_result);die();
+	    $get_article_list_result = $this->article_logic->get_article_list($condition,'*',$page_size);
+	    foreach($get_article_list_result['data']['list'] as $article){
+	        echo '<br/>'.$article['id'];
+	    }print_r($get_article_list_result['data']['page']);die();
+// 	    print_r($get_article_list_result);die();
 	    
 	    $this->load->view('article_list');
 	}

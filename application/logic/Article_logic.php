@@ -104,7 +104,7 @@ class Article_logic extends Yox_Logic {
             $result['message']='user_id 错误';
             return $result;
         }
-        $get_article_list_result = $this->article_model->get_article_list($condition,$fields,$page_size=20);
+        $get_article_list_result = $this->article_model->get_article_list($condition,$fields,$page_size);
         //隐私设置
 //         $Privacy_model = D('Privacy');
 //         $mark_result = $Privacy_model->mark_content_list_privacy($prefix='article',$get_article_list_result['data']);

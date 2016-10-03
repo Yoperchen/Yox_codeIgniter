@@ -1,11 +1,12 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * 文章
  * @author Yoper 944975166@qq.com
  * http://www.linglingtang.com
  *
  */
-class Article_model extends CI_Model {
+class Article_model extends Yox_Model {
 	public function __construct()
 	{
 	    // Call the CI_Model constructor
@@ -60,8 +61,20 @@ class Article_model extends CI_Model {
 	public function get_article_list($condition,$fields='*',$page_size=20)
 	{
         $result = array('status'=>0);
-	    $list = $this->db->where($condition)->select($fields)->order_by('id desc')->get($this->table)->result_array(); 
+        $this->load->library('pagination');
+        $count = $this->db->where($condition)->count_all_results($this->table);// 查询满足要求的总记录数
+        $list  = $this->db->where($condition)->select($fields)->order_by('id desc')->limit($page_size,$this->input->get('per_page')?($this->input->get('per_page')-1)*$page_size:0)->get($this->table)->result_array();
+        $config = $this->get_page_config($count,$page_size);
+        $this->pagination->initialize($config['data']);
+//         print_r();
 	    $result['status']=1;
+	    $result['message']='查询成功';
+	    $result['data']['page']=array(
+						'count'=>$count,//文章总数
+						'page_size'=>$page_size,//每页几条
+						'page'=>$this->input->get('per_page'),//当前第几页
+						'page_str'=>$this->pagination->create_links(),//创建分页链接
+					);
 	    $result['data']['list']=$list;
 	    return $result;
 	}
